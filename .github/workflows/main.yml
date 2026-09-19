@@ -202,6 +202,7 @@ jobs:
     needs: [job_prepare]
     if: ${{ always() && needs.job_prepare.result == 'success' }}
     strategy:
+      fail-fast: false
       matrix:
         build_arch: ['arm64_ipk',"arm64_apk","x64_apk","x64_ipk","mmips_ipk","mmips_apk" ]
     runs-on: ubuntu-latest
@@ -273,10 +274,10 @@ jobs:
             mkdir sdk && tar -xvf $file_name -C ./sdk --strip-components=1
           fi
           cd sdk
-          echo "src-git base https://github.com/openwrt/openwrt.git;main" > feeds.conf
-          echo "src-git packages https://github.com/openwrt/packages.git;master" >> feeds.conf
-          echo "src-git luci https://github.com/openwrt/luci.git;master" >> feeds.conf
-          echo "src-git routing https://git.openwrt.org/feed/routing.git;master"  >> feeds.conf
+          echo "src-git base https://github.com/openwrt/openwrt.git;openwrt-24.10" > feeds.conf
+          echo "src-git packages https://github.com/openwrt/packages.git;openwrt-24.10" >> feeds.conf
+          echo "src-git luci https://github.com/openwrt/luci.git;openwrt-24.10" >> feeds.conf
+          echo "src-git routing https://git.openwrt.org/feed/routing.git;openwrt-24.10"  >> feeds.conf
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           cd ..
